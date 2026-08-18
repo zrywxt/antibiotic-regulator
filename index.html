@@ -90,33 +90,33 @@
             outDiv.innerText = "Scanner is OFF. Click Start to scan.";
         }
 
-        async function sendToAdafruit(scannedValue) {
-            outDiv.innerText = "Sending " + scannedValue + " to Adafruit...";
+async function sendToAdafruit(scannedValue) {
+    outDiv.innerText = "Sending " + scannedValue + " to Adafruit...";
 
-            try {
-                const response = await fetch(`https://io.adafruit.com/api/v2/${AIO_USERNAME}/feeds/${FEED_KEY}/data`, {
-                    method: "POST",
-                    headers: {
-                        "X-AIO-Key": AIO_KEY,
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ value: scannedValue })
-                });
+    try {
+        const response = await fetch(`https://io.adafruit.com/api/v2/${AIO_USERNAME}/feeds/${FEED_KEY}/data`, {
+            method: "POST",
+            headers: {
+                "X-AIO-Key": AIO_KEY,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ value: scannedValue })
+        });
 
-                if (response.ok) {
-                    outDiv.innerText = "Sent successfully: " + scannedValue;
-                } else {
-                    outDiv.innerText = "Error sending to Adafruit feed.";
-                }
-            } catch (err) {
-                outDiv.innerText = "Network error. Check connection.";
-            } finally {
-                // 3-second delay so it doesn't repeatedly send the same QR code
-                setTimeout(() => { 
-                    isCooldown = false; 
-                }, 3000);
-            }
+        if (response.ok) {
+            outDiv.innerText = "Sent successfully: " + scannedValue;
+        } else {
+            // Displays exact HTTP error code (e.g. 401 Unauthorized, 404 Not Found, 429 Rate Limited)
+            outDiv.innerText = `Adafruit Error: ${response.status} - ${response.statusText}`;
         }
+    } catch (err) {
+        outDiv.innerText = "Network error. Check connection.";
+    } finally {
+        setTimeout(() => { 
+            isCooldown = false; 
+        }, 3000);
+    }
+}
 
         function tick() {
             if (!isScanning) return;
