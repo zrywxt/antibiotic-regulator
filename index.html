@@ -67,6 +67,7 @@ function scanQr() {
             console.log("The camera reads it's:", cream.data);
             p.innerText = cream.data; // Fixed: extracts text string
             stopQr();
+            sendToAdafruit(cream.data);
             return; // Stops loop on successful scan
         }
     }
