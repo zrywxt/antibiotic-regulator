@@ -9,9 +9,11 @@
 <body>
     <video playsinline autoplay id="vid"></video>
     <button id="btn">Start</button>
+    <p id="result"></p>
 <script>
 const vid = document.getElementById("vid");
 const btn = document.getElementById("btn");
+const p = document.querySelector("#p");
 const canvas = document.createElement("canvas");
 const makeCanvas2d = canvas.getContext("2d");
 function scanQr() {
@@ -27,6 +29,7 @@ function scanQr() {
     const cream = jsQR(makeCanvas2d.data, makeCanvas2d.width,makeCanvas2d.height);
     if(cream) {
         console.log("The camera reads it's:", cream);
+        p.innerText = cream;
         stopQr()
     }
 
