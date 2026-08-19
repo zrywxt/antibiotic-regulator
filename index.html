@@ -18,6 +18,42 @@ const p = document.querySelector("#result");
 const canvas = document.createElement("canvas");
 const makeCanvas2d = canvas.getContext("2d");
 
+
+// Adadfruit IO thng is vibe coded
+const aioUsername = "zrywxt";
+const aioKey = "aio_wdbu292VvkS4Ud3mTjBZXi8tXOAeE";
+const feedName = "qr-data";
+
+async function sendToAdafruit(qrData) {
+  const url = `https://io.adafruit.com/api/v2/${aioUsername}/feeds/${feedName}/data`;
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "X-AIO-Key": aioKey,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        value: qrData
+      })
+    });
+
+    if (response.ok) {
+      console.log("Successfully sent to Adafruit IO!");
+      p.innerText = "Scanned and sent: " + qrData;
+    } else {
+      console.error("Adafruit IO Error:", response.statusText);
+      p.innerText = "Failed to send to Adafruit IO.";
+    }
+  } catch (error) {
+    console.error("Network Error:", error);
+    p.innerText = "Network error while sending.";
+  }
+}
+
+
+
 function scanQr() {
     if (vid.readyState === vid.HAVE_ENOUGH_DATA) {
         canvas.height = vid.videoHeight;
