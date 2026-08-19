@@ -13,7 +13,7 @@
 <script>
 const vid = document.getElementById("vid");
 const btn = document.getElementById("btn");
-const p = document.querySelector("#p");
+const p = document.querySelector("#result");
 const canvas = document.createElement("canvas");
 const makeCanvas2d = canvas.getContext("2d");
 function scanQr() {
@@ -24,9 +24,9 @@ function scanQr() {
     }
     makeCanvas2d.drawImage(vid, 0, 0, canvas.width,canvas.height);
 
-    const rawQr = makeCanvas2d.getImageData(vid, 0, 0, canvas.width,canvas.height);
+    const rawQr = makeCanvas2d.getImageData( 0, 0, canvas.width,canvas.height);
 
-    const cream = jsQR(makeCanvas2d.data, makeCanvas2d.width,makeCanvas2d.height);
+    const cream = jsQR(rawQr.data, rawQr.width,rawQr.height);
     if(cream) {
         console.log("The camera reads it's:", cream);
         p.innerText = cream;
@@ -45,6 +45,7 @@ async function recordQr() {
     try {
         incominVideo = await navigator.mediaDevices.getUserMedia(recordingPrefrences);
         vid.srcObject = incominVideo;
+        requestAnimationFrame(scanQr);
         btn.textContent = "Stop";
     } catch(someError) {
         console.log(someError);
@@ -58,7 +59,6 @@ function stopQr() {
         vid.srcObject = null;
         incominVideo = null;
         btn.textContent = "Start";
-        requestAnimationFrame(scanQr);
     }
 }
 
