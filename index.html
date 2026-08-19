@@ -10,30 +10,37 @@
     <video playsinline autoplay id="vid"></video>
     <button id="btn">Start</button>
     <p id="result"></p>
+
 <script>
 const vid = document.getElementById("vid");
 const btn = document.getElementById("btn");
 const p = document.querySelector("#result");
 const canvas = document.createElement("canvas");
 const makeCanvas2d = canvas.getContext("2d");
+
 function scanQr() {
-    // vibe coded this "if"
     if (vid.readyState === vid.HAVE_ENOUGH_DATA) {
         canvas.height = vid.videoHeight;
         canvas.width = vid.videoWidth;
+
+        makeCanvas2d.drawImage(vid, 0, 0, canvas.width, canvas.height);
+        const rawQr = makeCanvas2d.getImageData(0, 0, canvas.width, canvas.height);
+        const cream = jsQR(rawQr.data, rawQr.width, rawQr.height);
+
+        if (cream) {
+            console.log("The camera reads it's:", cream.data);
+            p.innerText = cream.data; // Fixed: extracts text string
+            stopQr();
+            return; // Stops loop on successful scan
+        }
     }
-    makeCanvas2d.drawImage(vid, 0, 0, canvas.width,canvas.height);
 
-    const rawQr = makeCanvas2d.getImageData( 0, 0, canvas.width,canvas.height);
-
-    const cream = jsQR(rawQr.data, rawQr.width,rawQr.height);
-    if(cream) {
-        console.log("The camera reads it's:", cream);
-        p.innerText = cream;
-        stopQr()
+    // Keeps scanning frame by frame while camera is on
+    if (incominVideo) {
+        requestAnimationFrame(scanQr);
     }
-
 }
+
 const recordingPrefrences = {
     video: { facingMode: { ideal: "environment" } },
     audio: false
@@ -52,7 +59,6 @@ async function recordQr() {
     }
 }
 
-// vibecoded this function
 function stopQr() {
     if (incominVideo) {
         incominVideo.getTracks().forEach(track => track.stop());
