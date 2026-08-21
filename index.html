@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div id="workarea">
     <video playsinline autoplay id="vid"></video>
     <button id="btn">Start</button>
     <p id="result"></p>
+</div>
 
 <script>
 const vid = document.getElementById("vid");
@@ -19,9 +22,9 @@ const canvas = document.createElement("canvas");
 const makeCanvas2d = canvas.getContext("2d");
 
 
-// Adadfruit IO thng is vibe coded
+// Adadfruit IO thing is vibe coded, though i read the documentation, it bounced off, happens at the last moment
 const aioUsername = "zrywxt";
-const aioKey = "aio_wdbu292VvkS4Ud3mTjBZXi8tXOAeE";
+const aioKey = "aio_tJWH64Or38BNum3YPfdx7DtfB2ry";
 const feedName = "qr-data";
 
 async function sendToAdafruit(qrData) {
@@ -30,29 +33,34 @@ async function sendToAdafruit(qrData) {
   try {
     const response = await fetch(url, {
       method: "POST",
+      mode: "cors",
       headers: {
         "X-AIO-Key": aioKey,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        value: qrData
+        value: String(qrData)
       })
     });
 
+    const responseData = await response.json();
+
     if (response.ok) {
-      console.log("Successfully sent to Adafruit IO!");
+      console.log("Successfully sent to Adafruit IO!", responseData);
       p.innerText = "Scanned and sent: " + qrData;
     } else {
-      console.error("Adafruit IO Error:", response.statusText);
-      p.innerText = "Failed to send to Adafruit IO.";
+      console.error("Adafruit IO Error:", responseData);
+      p.innerText = "Failed to send request.";
+      p.style.borderColor = "red";
     }
   } catch (error) {
     console.error("Network Error:", error);
     p.innerText = "Network error while sending.";
+    p.style.borderColor = "red";
   }
 }
 
-
+// This scanQr() is also vibe coded
 
 function scanQr() {
     if (vid.readyState === vid.HAVE_ENOUGH_DATA) {
@@ -65,14 +73,12 @@ function scanQr() {
 
         if (cream) {
             console.log("The camera reads it's:", cream.data);
-            p.innerText = cream.data; // Fixed: extracts text string
+            p.innerText = cream.data;
             stopQr();
             sendToAdafruit(cream.data);
-            return; // Stops loop on successful scan
+            return;
         }
     }
-
-    // Keeps scanning frame by frame while camera is on
     if (incominVideo) {
         requestAnimationFrame(scanQr);
     }
@@ -95,7 +101,7 @@ async function recordQr() {
         console.log(someError);
     }
 }
-
+// This stopQr functionaly is also vibe coded
 function stopQr() {
     if (incominVideo) {
         incominVideo.getTracks().forEach(track => track.stop());
@@ -112,6 +118,7 @@ btn.addEventListener("click", () => {
         recordQr();
     }
 });
+sendToAdafruit("hey there")
 </script>
 </body>
 </html>
