@@ -1,1 +1,62 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Aldrich";
+}
 
+@font-face {
+    font-family: "Aldrich";
+    src: url('fonts/aldrich/Aldrich-Regular.ttf') format("truetype");
+}
+
+body {
+    background-color: #292929;
+}
+
+#workarea {
+    background-color: #000;
+    display: flex;
+    justify-content:  center;
+    align-items: center;
+    flex-direction: column;
+    gap: 2rem;
+    width: 75%;
+    margin-left: 12.5%;
+    height: 80vh;
+    margin-top: 10vh;
+    padding: 5%;
+    border-radius: 20px;
+    box-shadow:  10px 10px 20px black;
+}
+p {
+    color: white;
+}
+video {
+    background-color: #ed91ff1a;
+    width: 70%;
+    height: 50vh;
+    border-radius: 15px;
+}
+
+button {
+    border-radius: 2px;
+    border: 1px solid transparent;
+    padding: 2%;
+    background-color: black;
+    background: linear-gradient(180deg, black, #00fff22c);
+    color: white;
+    font-size: 18px;
+    transition: all 0.3s;
+}
+
+button:hover {
+    background: black;
+    border: 1px solid #00fff2;
+    transition: all 0.3s;
+}
+button:active {
+    background-color: white;
+    color: black;
+    transition: all 0.3s;
+}
