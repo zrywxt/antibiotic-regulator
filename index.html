@@ -9,7 +9,6 @@
 </head>
 <body>
 <div id="workarea">
-    <input type="password" id="keyInput" placeholder="Adafruit Key" style="width: 70%; padding: 8px; margin-bottom: 10px; background: #000; color: #fff; border: 1px solid #00fff244; border-radius: 4px;">
     <video playsinline autoplay id="vid"></video>
     <button id="btn">Start</button>
     <p id="result"></p>
@@ -19,7 +18,6 @@
 const vid = document.getElementById("vid");
 const btn = document.getElementById("btn");
 const p = document.querySelector("#result");
-const keyInput = document.getElementById("keyInput");
 const canvas = document.createElement("canvas");
 const makeCanvas2d = canvas.getContext("2d");
 
@@ -28,16 +26,18 @@ const makeCanvas2d = canvas.getContext("2d");
 const aioUsername = "zrywxt";
 const feedName = "qr-data";
 
-keyInput.value = localStorage.getItem("aio_key_store") || "";
-keyInput.addEventListener("input", () => {
-    localStorage.setItem("aio_key_store", keyInput.value.trim());
-});
+const urlParams = new URLSearchParams(window.location.search);
+const keyFromUrl = urlParams.get('key');
+
+if (keyFromUrl) {
+    localStorage.setItem("aio_key_store", keyFromUrl.trim());
+}
 
 async function sendToAdafruit(qrData) {
-  const aioKey = keyInput.value.trim();
+  const aioKey = localStorage.getItem("aio_key_store");
 
   if (!aioKey) {
-    p.innerText = "Please enter API Key above.";
+    p.innerText = "Error: Key missing in URL!";
     return;
   }
 
