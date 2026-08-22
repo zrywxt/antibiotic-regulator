@@ -31,6 +31,7 @@ This utilises the following technologies :
 5. Arduino C
 
 #### To be honest and clear, the python is completely Vibe-Coded, and parts of JS, such as connecting to Adafruit and logic for jsQR are too vibe coded(I have indicated it against the code where its vibe-coded). Other then that, the HTML, CSS and Arduino C was rather easy.
+Also, the JS file in this repo is cosmetic, as due to lack of time, i can't link it, the workload is handled by the inline JS.
 ---
 
 A project by Sarthak and Satyam
